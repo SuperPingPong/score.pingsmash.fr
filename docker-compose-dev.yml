@@ -1,0 +1,16 @@
+version: '2'
+services:
+  frontend:
+    build: frontend
+    depends_on:
+      - api
+    restart: always
+    ports:
+      - "0.0.0.0:39080:80"
+    volumes:
+      - $PWD/frontend/html:/usr/share/nginx/html
+  api:
+    build: backend
+    restart: always
+    volumes:
+      - $PWD/backend/main.py:/app/main.py
