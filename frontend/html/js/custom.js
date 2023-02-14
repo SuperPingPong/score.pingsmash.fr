@@ -28,7 +28,6 @@ function search() {
               url: "/api/player",
               data: {
                 license_number: license,
-                name: name
               },
               type: "GET",
               success: function(selected_player) {
