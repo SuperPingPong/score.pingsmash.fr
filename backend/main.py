@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
-import codecs
+from os import environ
 import requests
 from lxml.html import fromstring
 import random
@@ -15,6 +15,7 @@ proxy = "https://mute-hill-43b6.cryptoshotgun.workers.dev/"
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+debug = environ.get('DEBUG', False)
 
 session = requests.session()
 session.verify = False
@@ -56,7 +57,6 @@ def search():
 
 
 @app.route("/api/player", methods=['GET', 'OPTIONS'])
-@cross_origin(origin='*', headers=['Content-Type'])
 def get_player():
     license_number = request.args.get("license_number", "")
     url = f"https://fftt.dafunker.com/v1/joueur/{license_number}"
@@ -66,4 +66,4 @@ def get_player():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", debug=debug)

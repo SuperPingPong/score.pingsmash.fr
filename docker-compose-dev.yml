@@ -12,5 +12,7 @@ services:
   api:
     build: backend
     restart: always
+    environment:
+      - DEBUG=True
     volumes:
       - $PWD/backend/main.py:/app/main.py
