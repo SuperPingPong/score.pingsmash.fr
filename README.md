@@ -1,4 +1,4 @@
-# superpingpong.llil.gq
+# 🏓 superpingpong.llil.gq 🏓
 
 ![](./documentation/images/frontend-1.png)
 
