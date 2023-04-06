@@ -57,9 +57,18 @@ def search():
 
 
 @app.route("/api/player", methods=['GET', 'OPTIONS'])
-def get_player():
+def get_player_infos():
     license_number = request.args.get("license_number", "")
     url = f"https://fftt.dafunker.com/v1/joueur/{license_number}"
+    response = session.get(url)
+    content = response.json()
+    return json.dumps(content), response.status_code, {'Content-Type': 'application/json; charset=utf-8'}
+
+
+@app.route("/api/matchs", methods=['GET', 'OPTIONS'])
+def get_player_matchs():
+    license_number = request.args.get("license_number", "")
+    url = f"https://fftt.dafunker.com/v1/parties/{license_number}"
     response = session.get(url)
     content = response.json()
     return json.dumps(content), response.status_code, {'Content-Type': 'application/json; charset=utf-8'}

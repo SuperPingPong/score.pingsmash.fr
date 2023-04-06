@@ -71,3 +71,19 @@ i {
 p {
     display: inline;
 }
+
+@media (max-width: 768px) {
+  /* Styles for devices with screen width up to 768px */
+  .box-root {
+    flex-direction: column;
+  }
+  .box-root > div {
+    grid-area: unset !important;
+  }
+  .formbg-outer {
+    padding: 0 15px;
+  }
+  .padding-horizontal--48 {
+    padding: 24px;
+  }
+}
