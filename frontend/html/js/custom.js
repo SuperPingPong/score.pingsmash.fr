@@ -48,12 +48,22 @@ function updatePlayerData(license) {
 
             const match_div = $('<div style="display: flex; align-items: center; margin-bottom: 5px;"></div>');
             const match_icon = $('<div style="margin-right: 8px; font-size: 1.3rem; color: white; text-align: center; background-color: ' + color + '; border-radius: 50%; width: 2em; height: 2em; line-height: 2em;">' + color_letter + '</div>');
-            const match_content = $('<div style="font-size: 0.9rem"><span style="color: #0C9AC1; font-size: 0.9rem">' + match.p  + '</span> - <u style="cursor: pointer">' + match.nom.trim() + '</u><br><span style="color: gray; font-size: 0.9rem; margin-left: auto;">Coef' + (block.processed == 0 ? ' estimé': '') + ': ' + match.coeff + '</span></div>');
-            match_content.find('u').click(function() {
-              // reset match panel
-              $('#matchs').html('');
-              updatePlayerData(match.licence);
-            });
+            const match_content = $('<div style="font-size: 0.9rem"><span style="color: #0C9AC1; font-size: 0.9rem">' + match.p  + '</span> - <span class="match_name">' + decodeURIComponent(escape(match.nom.trim())) + '</span><br><span style="color: gray; font-size: 0.9rem; margin-left: auto;">Coef' + (block.processed == 0 ? ' estimé': '') + ': ' + match.coeff + '</span></div>');
+
+            if (match.licence === '') {
+              match_content.find('.match_name').css('text-decoration', 'none');
+              match_content.find('.match_name').css('cursor', 'default');
+            } else {
+              match_content.find('.match_name').css('text-decoration', 'underline');
+              match_content.find('.match_name').css('cursor', 'pointer');
+            }
+
+            if (match.licence != '') {
+              match_content.find('.match_name').click(function() {
+                $('#matchs').html('');
+                updatePlayerData(match.licence);
+              });
+            }
 
             const match_ex = $('<div style="display: flex; align-items: center; margin-left: auto;"></div>');
             if (block.processed == 0) {
