@@ -1,3 +1,26 @@
+function formatName(name) {
+  const accents = {
+    'Ã©': 'é',
+    'Ã¨': 'è',
+    'Ãª': 'ê',
+    'Ã«': 'ë',
+    'Ã¢': 'â',
+    'Ã®': 'î',
+    'Ã¯': 'ï',
+    'Ã´': 'ô',
+    'Ã¹': 'ù',
+    'Ã»': 'û',
+    'Ã¼': 'ü',
+    'Ã§': 'ç'
+  };
+
+  for (const accentedChar in accents) {
+    name = name.replace(new RegExp(accentedChar, 'g'), accents[accentedChar]);
+  }
+
+  return name;
+}
+
 function updatePlayerData(license) {
   $.ajax({
     url: "/api/player",
@@ -48,7 +71,7 @@ function updatePlayerData(license) {
 
             const match_div = $('<div style="display: flex; align-items: center; margin-bottom: 5px;"></div>');
             const match_icon = $('<div style="margin-right: 8px; font-size: 1.3rem; color: white; text-align: center; background-color: ' + color + '; border-radius: 50%; width: 2em; height: 2em; line-height: 2em;">' + color_letter + '</div>');
-            const match_content = $('<div style="font-size: 0.9rem"><span style="color: #0C9AC1; font-size: 0.9rem">' + match.p  + '</span> - <span class="match_name">' + decodeURIComponent(escape(match.nom.trim())) + '</span><br><span style="color: gray; font-size: 0.9rem; margin-left: auto;">Coef' + (block.processed == 0 ? ' estimé': '') + ': ' + match.coeff + '</span></div>');
+            const match_content = $('<div style="font-size: 0.9rem"><span style="color: #0C9AC1; font-size: 0.9rem">' + match.p  + '</span> - <span class="match_name">' + formatName(match.nom.trim()) + '</span><br><span style="color: gray; font-size: 0.9rem; margin-left: auto;">Coef' + (block.processed == 0 ? ' estimé': '') + ': ' + match.coeff + '</span></div>');
 
             if (match.licence === '') {
               match_content.find('.match_name').css('text-decoration', 'none');
