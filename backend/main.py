@@ -1,10 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_cors import CORS
 
 from os import environ
 import requests
-from lxml.html import fromstring
-import random
 import json
 import urllib3
 import xml.etree.ElementTree as ET
