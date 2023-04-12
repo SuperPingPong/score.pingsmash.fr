@@ -1,9 +1,13 @@
-FROM python:3.10.9
+FROM python:3.10.9-alpine
 
+RUN adduser -D worker -h /app
+USER worker
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+ENV PATH="/app/.local/bin:${PATH}"
+RUN pip install --user --upgrade pip
+COPY --chown=worker:worker requirements.txt requirements.txt
+RUN pip install --user -r requirements.txt
 
-COPY main.py main.py
+COPY --chown=worker:worker . .
 CMD python main.py
