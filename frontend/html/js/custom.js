@@ -1,3 +1,25 @@
+function parse_query_string(query) {
+  var vars = query.split("&");
+  var query_string = {};
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    var key = decodeURIComponent(pair.shift());
+    var value = decodeURIComponent(pair.join("="));
+    // If first entry with this name
+    if (typeof query_string[key] === "undefined") {
+      query_string[key] = value;
+      // If second entry with this name
+    } else if (typeof query_string[key] === "string") {
+      var arr = [query_string[key], value];
+      query_string[key] = arr;
+      // If third or later entry with this name
+    } else {
+      query_string[key].push(value);
+    }
+  }
+  return query_string;
+}
+
 function formatName(name) {
   const accents = {
     'Ã©': 'é',
@@ -30,6 +52,17 @@ function updatePlayerData(license) {
     type: "GET",
     success: function(selected_player) {
       const result = $('#result');
+      if (selected_player.nom === "" && selected_player.initm === 0) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Numéro de license invalide.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        }).then(function() {
+          window.location = '/';
+        })
+        return;
+      }
       for (var prop in selected_player) {
           if (Object.prototype.hasOwnProperty.call(selected_player, prop)) {
             $('#result_' + prop).html(selected_player[prop]);
@@ -71,7 +104,7 @@ function updatePlayerData(license) {
 
             const match_div = $('<div style="display: flex; align-items: center; margin-bottom: 5px;"></div>');
             const match_icon = $('<div style="margin-right: 8px; font-size: 1.3rem; color: white; text-align: center; background-color: ' + color + '; border-radius: 50%; width: 2em; height: 2em; line-height: 2em;">' + color_letter + '</div>');
-            const match_content = $('<div style="font-size: 0.9rem"><span style="color: #0C9AC1; font-size: 0.9rem">' + match.p  + '</span> - <span class="match_name">' + formatName(match.nom.trim()) + '</span><br><span style="color: gray; font-size: 0.9rem; margin-left: auto;">Coef' + (block.processed == 0 ? ' estimé': '') + ': ' + match.coeff + '</span></div>');
+            const match_content = $('<div style="font-size: 0.9rem"><span style="color: #0C9AC1; font-size: 0.9rem">' + match.p  + '</span> - <a class="match_name">' + formatName(match.nom.trim()) + '</a><br><span style="color: gray; font-size: 0.9rem; margin-left: auto;">Coef' + (block.processed == 0 ? ' estimé': '') + ': ' + match.coeff + '</span></div>');
 
             if (match.licence === '') {
               match_content.find('.match_name').css('text-decoration', 'none');
@@ -79,12 +112,15 @@ function updatePlayerData(license) {
             } else {
               match_content.find('.match_name').css('text-decoration', 'underline');
               match_content.find('.match_name').css('cursor', 'pointer');
+              match_content.find('.match_name').css('color', 'black');
+              match_content.find('.match_name').attr('href', '/?license='+match.licence);
             }
 
             if (match.licence != '') {
               match_content.find('.match_name').click(function() {
                 $('#matchs').html('');
-                updatePlayerData(match.licence);
+                // updatePlayerData(match.licence);
+                window.location = '/?license=' + license;
               });
             }
 
@@ -141,7 +177,8 @@ function search() {
             input.val("");
             suggestions.hide();
             const license = player.license
-            updatePlayerData(license);
+            // updatePlayerData(license);
+            window.location = '/?license=' + license;
           });
           suggestions.append(div);
         }
@@ -156,7 +193,6 @@ function search() {
 
 // Get the form element
 const searchForm = document.getElementById("search-player");
-
 // Add an event listener to the form
 searchForm.addEventListener("submit", function(event) {
   // Prevent the default behavior of the browser
@@ -169,3 +205,18 @@ document.querySelector('input').addEventListener('keyup', function(event) {
         document.activeElement.blur();
     }
 });
+
+function fetchLicense() {
+  var query = window.location.search.substring(1);
+  var qs = parse_query_string(query);
+  if (qs.license != undefined) {
+    updatePlayerData(qs.license);
+  }
+};
+
+// manage refresh
+$(document).ready(fetchLicense);
+// manage click button back browser
+window.onbeforeunload = function(e) {
+  fetchLicense();
+};
