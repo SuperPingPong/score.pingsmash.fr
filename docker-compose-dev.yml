@@ -14,5 +14,7 @@ services:
     restart: always
     environment:
       - DEBUG=True
+      - PYTHONUNBUFFERED=1
     volumes:
+      - $PWD/backend/utils.py:/app/utils.py
       - $PWD/backend/main.py:/app/main.py

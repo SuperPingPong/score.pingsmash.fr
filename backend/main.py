@@ -7,6 +7,8 @@ import json
 import urllib3
 import xml.etree.ElementTree as ET
 
+from utils import replace_empty_epreuve
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 proxy = "https://mute-hill-43b6.cryptoshotgun.workers.dev/"
@@ -69,7 +71,9 @@ def get_player_matchs():
     url = f"https://fftt.dafunker.com/v1/parties/{license_number}"
     response = session.get(url)
     content = response.json()
-    return json.dumps(content), response.status_code, {'Content-Type': 'application/json; charset=utf-8'}
+    matches_by_epreuve_and_date = replace_empty_epreuve(content)
+    return json.dumps(matches_by_epreuve_and_date), response.status_code, \
+        {'Content-Type': 'application/json; charset=utf-8'}
 
 
 if __name__ == "__main__":
