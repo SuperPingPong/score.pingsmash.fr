@@ -150,7 +150,7 @@ function updatePlayerData(license) {
             const color_score = match.ex == 0 ? "#433A46" : color;  // black : green/red
 
             const match_div = $('<div style="display: flex; align-items: center; margin-bottom: 5px;"></div>');
-            const match_icon = $('<div style="margin-right: 8px; font-size: 1.3rem; color: white; text-align: center; background-color: ' + color + '; border-radius: 50%; width: 2em; height: 2em; line-height: 2em;">' + color_letter + '</div>');
+            const match_icon = $('<div style="flex-shrink: 0; margin-right: 8px; font-size: 1.3rem; color: white; text-align: center; background-color: ' + color + '; border-radius: 50%; width: 2em; height: 2em; line-height: 2em;">' + color_letter + '</div>');
             const match_content = $('<div style="font-size: 0.9rem"><span style="color: #0C9AC1; font-size: 0.9rem">' + match.p  + '</span> - <a class="match_name">' + formatName(match.nom.trim()) + '</a><br><span style="color: gray; font-size: 0.9rem; margin-left: auto;">Coef' + (block.processed == 0 ? ' estimé': '') + ': ' + match.coeff + '</span></div>');
 
             if (match.licence === '') {
