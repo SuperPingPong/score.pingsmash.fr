@@ -43,6 +43,48 @@ function formatName(name) {
   return name;
 }
 
+function updateMatchNames() {
+  // Get all the <a> tags with class="match_name" and text-decoration="none"
+  const matchNames = $('span').next('a.match_name').filter(function() {
+    return $(this).attr('href') === undefined;
+  });
+
+  matchNames.each(function() {
+    const matchName = $(this);
+    const surname = matchName.text().trim();
+    const score = matchName.prev('span').text().trim();
+    // console.log('Searching for', '"' + surname + '"', ' - ', score)
+
+    $.ajax({
+      url: '/api/search',
+      data: {
+        surname: surname,
+        name: ""
+      },
+      type: 'GET',
+      success: function(data) {
+        // Filter the list to find the player with the same name and score
+        // console.log('Result:', data)
+        const player = data.find(p => p.score === score);
+        if (player) {
+          // Update the <a> tag with the player's license
+          matchName.attr('href', `/?license=${player.license}`);
+          // Add underline and pointer styles to the <a> tag
+          matchName.css({
+            'text-decoration': 'underline',
+            'cursor': 'pointer',
+            'color': 'black',
+          });
+        }
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+  });
+}
+
+
 function updatePlayerData(license) {
   $.ajax({
     url: "/api/player",
@@ -82,12 +124,15 @@ function updatePlayerData(license) {
 
       // const result = $('#result');
       const matchs = $('#matchs');
+      let countScoreByDay = 0;
       let colCount = 0;
       let rowDiv;
 
       matchs_player.list.forEach((block, index_block) => {
 
         block.journees.forEach((tournament) => {
+
+          countScoreByDay = 0;
 
           // create a new row div after every 2 col-sm
           if (colCount % 2 == 0) {
@@ -97,6 +142,8 @@ function updatePlayerData(license) {
 
           const colSm = $('<div class="col-sm-6"><hr><span style="font-size: 0.8rem"><b style="text-align: center">' + tournament.date + ' - ' + tournament.epreuve + '</b></span><hr></div>')
           tournament.matchs.forEach((match) => {
+
+            countScoreByDay += match.ex;
 
             const color = match.vdf == 0 ? "#69BB82" : "#EF736D" // green : red
             const color_letter = match.vdf == 0 ? "V" : "D"
@@ -137,6 +184,24 @@ function updatePlayerData(license) {
             colSm.append(match_div);
 
           });
+
+          // Manage total count by day
+          const color = countScoreByDay > 0 ? "#69BB82" : "#EF736D" // green : red
+          const color_score = countScoreByDay === 0 ? "#433A46" : color;  // black : green/red
+          const total_div = $('<div style="display: flex; align-items: center; margin-bottom: 0px;"></div>');
+          const total_icon = $('<div style="margin-right: 8px; font-size: 1.3rem; color: white; text-align: center; background-color: #433A46; border-radius: 50%; width: 2em; height: 2em; line-height: 2em;">T</div>');
+          const total_content = $('<div style="font-size: 0.9rem;"><b>TOTAL:</b></div>');
+          const total_ex = $('<div style="display: flex; align-items: center; margin-left: auto;"></div>');
+          if (block.processed == 0) {
+            const crown = $('<div style="align-items: center; margin-right: 5px;"><span style="font-size: 1.2rem;">&#x1F451;</span></div>');
+            total_ex.append(crown);
+          }
+          total_ex.append($('<div style="background-color: ' + color_score + '; border-radius: 15%; line-height: 25px; font-weight: bold; width: 39px; height: 26px; text-align: center; font-size: 0.8rem; color: white;">' + countScoreByDay + '</div>'));
+          total_div.append(total_icon);
+          total_div.append(total_content);
+          total_div.append(total_ex);
+          colSm.append(total_div);
+
           matchs.append(colSm);
 
           rowDiv.append(colSm);
@@ -211,6 +276,7 @@ function fetchLicense() {
   var qs = parse_query_string(query);
   if (qs.license != undefined) {
     updatePlayerData(qs.license);
+    setTimeout(updateMatchNames, 1000); // Call updateMatchNames() after a 1-second delay
   }
 };
 
