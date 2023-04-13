@@ -55,7 +55,7 @@ function updatePlayerData(license) {
       if (selected_player.nom === "" && selected_player.initm === 0) {
         Swal.fire({
           title: 'Error!',
-          text: 'Numéro de license invalide.',
+          text: 'Numéro de licence invalide.',
           icon: 'error',
           confirmButtonText: 'OK'
         }).then(function() {
