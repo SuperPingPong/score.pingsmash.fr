@@ -151,7 +151,7 @@ function updatePlayerData(license) {
 
             const match_div = $('<div style="display: flex; align-items: center; margin-bottom: 5px;"></div>');
             const match_icon = $('<div style="flex-shrink: 0; margin-right: 8px; font-size: 1.3rem; color: white; text-align: center; background-color: ' + color + '; border-radius: 50%; width: 2em; height: 2em; line-height: 2em;">' + color_letter + '</div>');
-            const match_content = $('<div style="font-size: 0.9rem"><span style="color: #0C9AC1; font-size: 0.9rem">' + match.p  + '</span> - <a class="match_name">' + formatName(match.nom.trim()) + '</a><br><span style="color: gray; font-size: 0.9rem; margin-left: auto;">Coef' + (block.processed == 0 ? ' estimé': '') + ': ' + match.coeff + '</span></div>');
+            const match_content = $('<div style="font-size: 0.9rem"><span style="color: #0C9AC1; font-size: 0.9rem">' + match.p + '</span> - <a class="match_name">' + formatName(match.nom.trim()) + '</a><br><span style="color: gray; font-size: 0.9rem; margin-left: auto;">Coef' + (block.processed == 0 ? ' estimé': '') + ': ' + match.coeff + '</span></div>');
 
             if (match.licence === '') {
               match_content.find('.match_name').css('text-decoration', 'none');
@@ -176,7 +176,7 @@ function updatePlayerData(license) {
               const crown = $('<div style="align-items: center; margin-right: 5px;"><span style="font-size: 1.2rem;">&#x1F451;</span></div>');
               match_ex.append(crown);
             }
-            match_ex.append($('<div style="background-color: ' + color_score + '; border-radius: 15%; line-height: 25px; font-weight: bold; width: 39px; height: 26px; text-align: center; font-size: 0.8rem; color: white;">' + match.ex + '</div>'));
+            match_ex.append($('<div style="background-color: ' + color_score + '; border-radius: 15%; line-height: 25px; font-weight: bold; width: 39px; height: 26px; text-align: center; font-size: 0.8rem; color: white;">' + match.ex.toString().substring(0, 5) + '</div>'));
 
             match_div.append(match_icon);
             match_div.append(match_content);
@@ -196,7 +196,7 @@ function updatePlayerData(license) {
             const crown = $('<div style="align-items: center; margin-right: 5px;"><span style="font-size: 1.2rem;">&#x1F451;</span></div>');
             total_ex.append(crown);
           }
-          total_ex.append($('<div style="background-color: ' + color_score + '; border-radius: 15%; line-height: 25px; font-weight: bold; width: 39px; height: 26px; text-align: center; font-size: 0.8rem; color: white;">' + countScoreByDay + '</div>'));
+          total_ex.append($('<div style="background-color: ' + color_score + '; border-radius: 15%; line-height: 25px; font-weight: bold; width: 39px; height: 26px; text-align: center; font-size: 0.8rem; color: white;">' + countScoreByDay.toString().substring(0, 5) + '</div>'));
           total_div.append(total_icon);
           total_div.append(total_content);
           total_div.append(total_ex);
