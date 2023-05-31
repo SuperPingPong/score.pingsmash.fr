@@ -3,7 +3,7 @@ services:
   frontend:
     build: frontend
     depends_on:
-      - api
+      - varnish
     restart: always
     ports:
       - "0.0.0.0:39080:80"
@@ -18,3 +18,12 @@ services:
     volumes:
       - $PWD/backend/utils.py:/app/utils.py
       - $PWD/backend/main.py:/app/main.py
+  varnish:
+    image: varnish:7.3.0
+    depends_on:
+      - api
+    restart: always
+    environment:
+      - VARNISH_HTTP_PORT=7777
+    volumes:
+      - $PWD/varnish/default.vcl:/etc/varnish/default.vcl:ro

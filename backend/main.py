@@ -73,7 +73,19 @@ def get_player_matchs():
     content = response.json()
     matches_by_epreuve_and_date = replace_empty_epreuve(content)
     return json.dumps(matches_by_epreuve_and_date), response.status_code, \
-        {'Content-Type': 'application/json; charset=utf-8'}
+           {'Content-Type': 'application/json; charset=utf-8'}
+
+
+@app.route("/api/virtual_score", methods=['GET', 'OPTIONS'])
+def get_player_virtual_score():
+    license_number = request.args.get("license_number", "")
+    url = f"https://fftt.dafunker.com/v1/joueur/{license_number}"
+    response = session.get(url)
+    content = response.json()
+    return json.dumps(
+        dict(
+            score=round(content.get('pointm')),
+        )), response.status_code, {'Content-Type': 'application/json; charset=utf-8'}
 
 
 if __name__ == "__main__":

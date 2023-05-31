@@ -1,15 +1,18 @@
 server {
-        listen 80 default_server;
-        server_name localhost;
-        server_tokens off;
+    listen 80 default_server;
+    server_name localhost;
+    server_tokens off;
 
-        location /api  {
-           proxy_pass  http://api:5000;
-        }
+    location /api {
+        proxy_pass http://varnish:7777;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+    }
 
-        location / {
-            root /usr/share/nginx/html;
-            error_page 404 /404.html;
-            index index.html;
-        }
+    location / {
+        root /usr/share/nginx/html;
+        add_header Cache-Control no-cache;
+        error_page 404 /404.html;
+        index index.html;
+    }
 }
