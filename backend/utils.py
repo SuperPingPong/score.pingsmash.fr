@@ -13,7 +13,7 @@ def replace_empty_epreuve(d):
 
     # For each 'date' with multiple subdictionaries, iterate through them and find the first non-empty 'epreuve' field
     for subdicts in date_to_subdicts.values():
-        epreuve = None
+        epreuve = ''
         for subdict in subdicts:
             if subdict['epreuve'] != '':
                 epreuve = subdict['epreuve']
@@ -32,7 +32,7 @@ def replace_empty_epreuve(d):
             for match in journee['matchs']:
                 epreuve = journee['epreuve']
                 date = journee['date']
-                if epreuve and date:
+                if date:
                     if (epreuve, date) not in matches_by_epreuve_and_date:
                         matches_by_epreuve_and_date[(epreuve, date)] = {
                             'processed': block['processed'],
