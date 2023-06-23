@@ -1,4 +1,4 @@
-# 🏓 superpingpong.llil.gq 🏓
+# 🏓 score.pingsmash.fr 🏓
 
 ![](./documentation/images/frontend-1.png)
 
