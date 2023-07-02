@@ -1,8 +1,8 @@
 # 🏓 score.pingsmash.fr 🏓
 
-![](./documentation/images/frontend-1.png)
+![](./documentation/images/front-1.png)
 
-![](./documentation/images/frontend-2.png)
+![](./documentation/images/front-2.png)
 
 ## Development
 
