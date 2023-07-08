@@ -28,15 +28,15 @@ def search():
     name = request.args.get("name", "")
     url = "https://fftt.dafunker.com/v1//proxy/xml_liste_joueur_o.php"
     response = session.get(url, params={"nom": surname, "prenom": name})
-    root = ET.fromstring(response.content)
+    root = ET.fromstring(response.content.replace(b'ISO-8859-1', b'UTF-8'))
     players = root.findall('joueur')
     result = []
     for player in players:
         nclub = player.find('nclub').text
         if nclub is None:
             continue
-        surname = player.find('nom').text
-        name = player.find('prenom').text
+        surname = player.find('nom').text.strip()
+        name = player.find('prenom').text.strip()
         score = player.find('points').text
         license_number = player.find('licence').text
         player_result = {
@@ -46,12 +46,9 @@ def search():
             'score': score,
             'license': license_number
         }
-        # Fix latin-1 encoding
-        for k, v in player_result.items():
-            player_result[k] = v.replace('’', '\'')
         for k, v in player_result.items():
             if k in ['surname', 'name', 'nclub']:
-                player_result[k] = v.encode('iso-8859-1').decode('utf-8')
+                player_result[k] = v
         result.append(player_result)
     return json.dumps(result[:10]), response.status_code, {'Content-Type': 'application/json; charset=utf-8'}
 
