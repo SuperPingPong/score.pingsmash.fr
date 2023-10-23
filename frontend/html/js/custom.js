@@ -208,7 +208,7 @@ async function updatePlayerData(license) {
 
           countScoreByDay += match.ex;
 
-          const color = match.vdf == 0 ? "#69BB82" : "#EF736D" // green : red
+          const color = match.vdf === 0 ? "#69BB82" : match.vdf === 2 ? "rgba(239, 115, 109, 0.6)" : "#EF736D"; // green : red (transparency 60%) : red
           let color_letter;
           if (match.vdf === 2) {
             color_letter = "F";
