@@ -209,7 +209,16 @@ async function updatePlayerData(license) {
           countScoreByDay += match.ex;
 
           const color = match.vdf == 0 ? "#69BB82" : "#EF736D" // green : red
-          const color_letter = match.vdf == 0 ? "V" : "D"
+          let color_letter;
+          if (match.vdf === 2) {
+            color_letter = "F";
+          } else if (match.vdf === 1) {
+            color_letter = "D";
+          } else if (match.vdf === 0) {
+            color_letter = "V";
+          } else {
+            color_letter = "?";
+          }
           const color_score = match.ex == 0 ? "#433A46" : color;  // black : green/red
 
           const match_div = $('<div style="display: flex; align-items: center; margin-bottom: 5px;"></div>');
