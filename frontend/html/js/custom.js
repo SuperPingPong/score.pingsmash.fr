@@ -63,7 +63,7 @@ async function updateBrokenLinks() {
       const score = match.parent().find('span.match_player_score').text().trim();
       console.log(`[updateBrokenLinks]: missing license, searching for ${surname} - ${score}`)
 
-      return  new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         $.ajax({
           url: '/api/search',
           data: {
