@@ -10,6 +10,8 @@ services:
   api:
     build: backend
     restart: always
+    environment:
+      - SENTRY_DSN=$SENTRY_DSN
   varnish:
     image: varnish:7.3.0
     depends_on:
