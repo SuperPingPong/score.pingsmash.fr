@@ -25,6 +25,7 @@ sentry_sdk.init(
     dsn=SENTRY_DSN,
     integrations=[FlaskIntegration()]
 )
+sentry_sdk.set_tag("app", "fftt-score")
 
 # Error handler for other exceptions
 @app.errorhandler(Exception)
