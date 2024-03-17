@@ -17,6 +17,7 @@ services:
       - PYTHONUNBUFFERED=1
       - SENTRY_DSN=$SENTRY_DSN
     volumes:
+      - $PWD/backend/ranks.json:/app/ranks.json
       - $PWD/backend/utils.py:/app/utils.py
       - $PWD/backend/main.py:/app/main.py
   varnish:

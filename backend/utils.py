@@ -1,3 +1,13 @@
+CATEGORIES = {
+    "P": "Poussin",
+    "B": "Benjamin",
+    "M": "Minimes",
+    "C": "Cadets",
+    "J": "Juniors",
+    "S": "Séniors",
+    "V": "Vétérans",
+}
+
 def replace_empty_epreuve(d):
     """
     Replace empty 'epreuve' fields with the same value from other subdicts with the same 'date'
@@ -55,3 +65,9 @@ def replace_empty_epreuve(d):
             'matchs': match_dict.get('matchs')
         })
     return grouped_matches
+
+def find_category(content_category: str):
+    for k, v in CATEGORIES.items():
+        if content_category.startswith(k):
+            return v
+    return

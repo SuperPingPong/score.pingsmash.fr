@@ -11,7 +11,7 @@ import json
 import urllib3
 import xml.etree.ElementTree as ET
 
-from utils import replace_empty_epreuve
+from utils import replace_empty_epreuve, find_category
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -28,6 +28,9 @@ sentry_sdk.init(
     integrations=[FlaskIntegration()]
 )
 sentry_sdk.set_tag("app", "fftt-score")
+
+with open('ranks.json', 'rb') as f:
+    MAP_RANKS = json.loads(f.read())
 
 # Error handler for other exceptions
 @app.errorhandler(Exception)
@@ -92,7 +95,15 @@ def get_player_infos():
     license_number = request.args.get("license_number", "")
     url = f"https://fftt.dafunker.com/v1/joueur/{license_number}"
     response = session.get(url)
+
     content = response.json()
+    content_category = content.get('cat')
+    content['category'] = find_category(content_category)
+
+    content['rangnat_cat'] = MAP_RANKS['National'].get(license_number, {}).get('rank')
+    content['rangreg_cat'] = MAP_RANKS['Regional'].get(license_number, {}).get('rank')
+    content['rangdep_cat'] = MAP_RANKS['Departemental'].get(license_number, {}).get('rank')
+
     return json.dumps(content), response.status_code, {'Content-Type': 'application/json; charset=utf-8'}
 
 
