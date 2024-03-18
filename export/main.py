@@ -35,20 +35,6 @@ CATEGORIES = {
 }
 CATEGORIES = [cat.lower() for cat in CATEGORIES.keys()]
 
-"""
-data = {
-    'pagination-current': 1,
-    'classement_type': 'cl',
-    'persons_sexe': 'Hommes',
-    'pagination-items-total': 100,
-    'pagination-order': 'CLGLOB+ASC',
-    'categorie': 's',
-    'pagination-order': 'CLGLOB+ASC',
-    'pagination-items': 100,
-    'pagination-items-total': 100
-}
-"""
-
 # if no more option: nat
 # optional field for reg  # ligues	"L01"
 REGS = {
@@ -198,6 +184,9 @@ with open(output_path, 'wb') as f:
 def fill_map(map_ranks: Dict, options: Dict[str, str]):
     pagination_current = 1
     pagination_total=None
+    if map_ranks.get('stats') is None:
+        map_ranks['stats'] = {}
+    map_ranks['stats'][json.dumps(options)]=0
     #  rank = 1
     while pagination_total is None or pagination_current <= int(pagination_total):
         data = {
@@ -240,6 +229,8 @@ def fill_map(map_ranks: Dict, options: Dict[str, str]):
                 'page': pagination_current,
                 'nom': nom,
             }
+
+            map_ranks['stats'][json.dumps(options)]+=1
             #  rank += 1
 
         pagination_current += 1

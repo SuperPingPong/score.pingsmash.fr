@@ -36,6 +36,8 @@ with open('ranks.json', 'rb') as f:
 @app.errorhandler(Exception)
 def handle_exception(error):
     sentry_sdk.capture_exception(error)
+    if debug:
+        print(error)
     if not hasattr(error, 'code'):
         error_code = 500
     else:
@@ -101,8 +103,20 @@ def get_player_infos():
     content['category'] = find_category(content_category)
 
     content['rangnat_cat'] = MAP_RANKS['National'].get(license_number, {}).get('rank')
+    if content['rangnat_cat'] and isinstance(content['rangnat_cat'], str):
+        rang_nat_options = MAP_RANKS['National'][license_number]['options']
+        max_rank_nat = MAP_RANKS['National']['stats'][json.dumps(rang_nat_options)]
+        content['rangnat_cat'] += '/' + str(max_rank_nat)
     content['rangreg_cat'] = MAP_RANKS['Regional'].get(license_number, {}).get('rank')
+    if content['rangreg_cat'] and isinstance(content['rangreg_cat'], str):
+        rang_reg_options = MAP_RANKS['Regional'][license_number]['options']
+        max_rank_reg = MAP_RANKS['Regional']['stats'][json.dumps(rang_reg_options)]
+        content['rangreg_cat'] += '/' + str(max_rank_reg)
     content['rangdep_cat'] = MAP_RANKS['Departemental'].get(license_number, {}).get('rank')
+    if content['rangdep_cat'] and isinstance(content['rangdep_cat'], str):
+        rang_dep_options = MAP_RANKS['Departemental'][license_number]['options']
+        max_rank_dep = MAP_RANKS['Departemental']['stats'][json.dumps(rang_dep_options)]
+        content['rangdep_cat'] += '/' + str(max_rank_dep)
 
     return json.dumps(content), response.status_code, {'Content-Type': 'application/json; charset=utf-8'}
 
