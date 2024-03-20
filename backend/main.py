@@ -12,6 +12,7 @@ import urllib3
 import xml.etree.ElementTree as ET
 
 from utils import replace_empty_epreuve, find_category
+from utils import CATEGORIES
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -101,6 +102,14 @@ def get_player_infos():
     content = response.json()
     content_category = content.get('cat')
     content['category'] = find_category(content_category)
+
+    cat = content['cat']
+    content['cat'] = cat.replace(cat[0], CATEGORIES[cat[0]] + ' ')
+
+    # Round floats
+    for k, v in content.items():
+        if isinstance(v, float):
+            content[k] = round(v, 2)
 
     content['rangnat_cat'] = MAP_RANKS['National'].get(license_number, {}).get('rank')
     if content['rangnat_cat'] and isinstance(content['rangnat_cat'], str):

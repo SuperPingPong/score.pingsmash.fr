@@ -1,9 +1,8 @@
 import os.path
-import re
 import requests
 import urllib3
-import urllib.parse
 
+from datetime import datetime
 import json
 from lxml import html
 from typing import Dict
@@ -282,6 +281,7 @@ for sex in SEX_OPTIONS:
             print((sex, cat, dep_key, dep_value, len(MAP_RANKS_DEP)))
 
 MAP_RANKS = {
+    'Date': datetime.now().strftime('%Y-%m-%d-%H-%%M-%S'),
     'National': MAP_RANKS_NAT,
     'Regional': MAP_RANKS_REG,
     'Departemental': MAP_RANKS_DEP,

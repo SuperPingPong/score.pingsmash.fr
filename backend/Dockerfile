@@ -10,5 +10,4 @@ COPY --chown=worker:worker requirements.txt requirements.txt
 RUN pip install --user -r requirements.txt
 
 COPY --chown=worker:worker . .
-COPY --chown=worker:worker ranks.json ranks.json
 CMD python main.py

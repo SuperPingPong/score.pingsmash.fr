@@ -1,11 +1,11 @@
 CATEGORIES = {
     "P": "Poussin",
     "B": "Benjamin",
-    "M": "Minimes",
-    "C": "Cadets",
-    "J": "Juniors",
-    "S": "Séniors",
-    "V": "Vétérans",
+    "M": "Minime",
+    "C": "Cadet",
+    "J": "Junior",
+    "S": "Sénior",
+    "V": "Vétéran",
 }
 
 def replace_empty_epreuve(d):
